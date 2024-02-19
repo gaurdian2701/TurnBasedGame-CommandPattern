@@ -4,6 +4,7 @@ using Command.Actions;
 using System.Collections;
 using System;
 using Object = UnityEngine.Object;
+using Command.Commands;
 
 namespace Command.Player
 {
@@ -159,6 +160,13 @@ namespace Command.Player
                 return unitView.transform.position + unitScriptableObject.EnemyBattlePositionOffset;
             else
                 return unitView.transform.position - unitScriptableObject.EnemyBattlePositionOffset;
+        }
+
+        //We finally arrive here after having collected all the necessary data by passing through multiple layers of controllers and services.
+        //And then finally the command is invoked by the Command Invoker
+        public void ProcessUnitCommand(UnitCommand commandToProcess)
+        {
+            GameService.Instance.CommandInvoker.ProcessCommand(commandToProcess);
         }
     }
 

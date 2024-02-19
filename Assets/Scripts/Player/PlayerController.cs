@@ -1,3 +1,5 @@
+using Command.Commands;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -88,6 +90,12 @@ namespace Command.Player
             units[activeUnitIndex].ResetUnitIndicator();
             activeUnitIndex--;
             units[activeUnitIndex].StartUnitTurn();
+        }
+
+        //Passing data to Unit
+        public void ProcessUnitCommand(UnitCommand commandToProcess)
+        {
+            GetUnitByID(commandToProcess.commandData.ActorUnitID).ProcessUnitCommand(commandToProcess);
         }
     }
 }
