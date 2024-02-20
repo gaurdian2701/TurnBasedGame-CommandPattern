@@ -10,6 +10,7 @@ using Command.Battle;
 using Command.Actions;
 using UnityEngine.UI;
 using Command.Commands;
+using Command.Replay;
 
 namespace Command.Main
 {

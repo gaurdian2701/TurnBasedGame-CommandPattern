@@ -4,31 +4,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ReplayService : MonoBehaviour
+namespace Command.Replay
 {
-    private Stack<ICommand> replayCommandStack;
-
-    public ReplayState ReplayState { get; private set; }
-
-    public ReplayService() => SetReplayState(ReplayState.INACTIVE);
-    public void SetReplayState(ReplayState state) => ReplayState = state;
-
-    public void SetCommandStack(Stack<ICommand> commandsToSet) => replayCommandStack = new Stack<ICommand>(commandsToSet);
-
-    public void ExecuteNextCommand()
+    public class ReplayService
     {
-        if (ReplayState == ReplayState.INACTIVE)
-            return;
+        private Stack<ICommand> replayCommandStack;
 
-        if (replayCommandStack.Count > 0)
+        public ReplayState ReplayState { get; private set; }
+
+        public ReplayService() => SetReplayState(ReplayState.INACTIVE);
+        public void SetReplayState(ReplayState state) => ReplayState = state;
+
+        public void SetCommandStack(Stack<ICommand> commandsToSet) => replayCommandStack = new Stack<ICommand>(commandsToSet);
+
+        public IEnumerator ExecuteNextCommand()
         {
-            StartCoroutine(nameof(WaitAndProcessNextCommand));
-        }
-    }
+            yield return new WaitForSecondsRealtime(1f);
 
-    private IEnumerator WaitAndProcessNextCommand()
-    {
-        yield return new WaitForSecondsRealtime(1f);
-        GameService.Instance.ProcessUnitCommand(replayCommandStack.Pop());
+            if (replayCommandStack.Count > 0)
+            {
+                GameService.Instance.ProcessUnitCommand(replayCommandStack.Pop());
+            }
+        }
     }
 }
