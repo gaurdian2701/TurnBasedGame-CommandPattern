@@ -1,4 +1,5 @@
 using Command.Commands;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,10 +35,10 @@ namespace Command.Player
         {
             activeUnitIndex = 0;
             ResetAllUnitStates();
-            TryStaringUnitTurn();
+            TryStartingUnitTurn();
         }
 
-        private void TryStaringUnitTurn()
+        private void TryStartingUnitTurn()
         {
             if (IsCurrentUnitAlive())
                 units[activeUnitIndex].StartUnitTurn();
@@ -61,7 +62,7 @@ namespace Command.Player
                 playerService.CheckGameOver();
 
                 activeUnitIndex++;
-                TryStaringUnitTurn();
+                TryStartingUnitTurn();
             }
         }
 
@@ -90,6 +91,23 @@ namespace Command.Player
             units[activeUnitIndex].ResetUnitIndicator();
             activeUnitIndex--;
             units[activeUnitIndex].StartUnitTurn();
+        }
+
+        public void ResetCurrentActiveUnit()
+        {
+            units[activeUnitIndex].ResetUnitIndicator();
+            activeUnitIndex--;
+
+            while(activeUnitIndex >= 0)
+            {
+                if (!units[activeUnitIndex].IsAlive())
+                    activeUnitIndex--;
+                else
+                {
+                    units[activeUnitIndex].StartUnitTurn();
+                    break;
+                }
+            }
         }
     }
 }
