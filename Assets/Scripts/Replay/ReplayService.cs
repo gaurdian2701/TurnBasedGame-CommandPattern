@@ -17,7 +17,18 @@ public class ReplayService : MonoBehaviour
 
     public void ExecuteNextCommand()
     {
-        if(replayCommandStack.Count > 0)
-            GameService.Instance.ProcessUnitCommand(replayCommandStack.Pop());  
+        if (ReplayState == ReplayState.INACTIVE)
+            return;
+
+        if (replayCommandStack.Count > 0)
+        {
+            StartCoroutine(nameof(WaitAndProcessNextCommand));
+        }
+    }
+
+    private IEnumerator WaitAndProcessNextCommand()
+    {
+        yield return new WaitForSecondsRealtime(1f);
+        GameService.Instance.ProcessUnitCommand(replayCommandStack.Pop());
     }
 }
